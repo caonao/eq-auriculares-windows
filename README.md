@@ -6,6 +6,8 @@ Todo es gratis: **Equalizer APO** + **Peace** + perfiles de **AutoEq** medidos p
 
 > Resultado típico: graves más definidos, voces más limpias y más claras, menos "barro". No cambia el carácter del auricular de forma artificial; le quita los defectos que tiene de fábrica.
 
+> **¿Tienes Claude (Claude Code) en tu PC?** Clona o descarga este repositorio, abre Claude en su carpeta y dile: *"Ayúdame a configurar la corrección de mis auriculares siguiendo este repositorio"*. El archivo `CLAUDE.md` tiene el procedimiento completo para el asistente: qué preguntarte, en qué orden hacer las cosas, qué no tocar sin tu permiso y los problemas conocidos.
+
 ---
 
 ## Cómo funciona
@@ -135,6 +137,7 @@ No son necesarias para que funcione, pero lo hacen más cómodo. Necesitan **Pyt
 
 | Herramienta | Para qué |
 |---|---|
+| `herramientas/Diagnostico-Inicial.ps1` | Punto de partida: Windows, driver de la Xonar (y si está firmado), Secure Boot, modo de prueba y qué hay instalado |
 | `herramientas/autoeq_peace.py` | Busca tu auricular en la base de Peace y exporta su perfil para Equalizer APO y, opcionalmente, como preset de Peace |
 | `herramientas/Crear-Accesos.ps1` | Crea en el menú Inicio un acceso directo por perfil ("EQ HD660S2", "EQ desactivado"...) para cambiar sin abrir Peace |
 | `herramientas/Cambiar-EQ.ps1` | El que ejecutan esos accesos directos (cambia el perfil activo) |
