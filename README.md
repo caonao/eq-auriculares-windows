@@ -34,7 +34,32 @@ Es como un LUT de calibración de monitor, pero para los oídos: corrige el disp
 
 > No he probado esta guía en una STX II; los nombres de los menús pueden variar algo según la versión del driver. La idea es siempre la misma: **la tarjeta no debe tocar el sonido**, eso lo hará Equalizer APO.
 
-**Driver**: el oficial de ASUS (con su panel *Xonar Essence STX II Audio Center*) o los drivers **UNi Xonar**, muy usados en Windows 10/11 (no oficiales, de la comunidad). Cualquiera vale.
+### Driver: usa el oficial de ASUS
+
+| | Oficial de ASUS | UNi Xonar (MaxedTech) |
+|---|---|---|
+| Versión | 8.1.11.5, Audio Center 0.3.1.11 (25-12-2019) | 1.81a, driver C-Media 1825 (2016), modificado |
+| Firma digital | **Sí** | **No**: la versión para la STX II en 64 bits pide Windows en *modo de prueba* o con la comprobación de firmas desactivada |
+| Windows 11 | No está en la lista de ASUS, pero los usuarios lo usan (es el de Windows 10) | La página dice que funciona como en Windows 10 |
+| Lo que aporta | Lo necesario | Extras: GX, Dolby, panel C-Media, correcciones antiguas |
+
+**Recomendación: el driver oficial.** Con esta guía, el ecualizado lo hace Equalizer APO, así que los extras del UNi no hacen falta. Y un driver sin firmar obliga a debilitar la seguridad de Windows:
+- El *modo de prueba* (`testsigning`) no se puede activar con **Arranque seguro (Secure Boot)** encendido. Hay que apagarlo en la BIOS.
+- Muchos juegos con antitrampas se niegan a arrancar en modo de prueba.
+- La **Integridad de memoria** de Windows (Aislamiento del núcleo) puede bloquear drivers sin firmar.
+
+Descarga oficial: <https://www.asus.com/supportonly/essence%20stx%20ii/helpdesk_download/> → Windows 10 64 bits → *Audio driver for Windows 10*.
+
+> En Windows 11 no hay soporte oficial de ASUS para esta tarjeta. Hay usuarios que lo usan sin problemas y otros que cuentan reinicios esporádicos. **Crea un punto de restauración antes de instalar.**
+
+**Si ahora tiene instalado el UNi Xonar y quiere pasarse al oficial:**
+1. Crea un punto de restauración (`Win + R` → `sysdm.cpl` → *Protección del sistema* → *Crear*).
+2. Pon a sonar cualquier archivo de audio y, con él sonando, desinstala el UNi Xonar desde *Aplicaciones instaladas* (es lo que recomiendan sus propias notas). Reinicia.
+3. Si Windows estaba en **modo de prueba** (se ve una marca de agua "Modo de prueba" abajo a la derecha del escritorio): abre una consola **como administrador**, ejecuta `bcdedit /set testsigning off` y reinicia.
+4. Si apagaste **Secure Boot** para el UNi, vuelve a encenderlo en la BIOS.
+5. Instala el driver oficial de ASUS y reinicia.
+
+**Si prefiere quedarse con el UNi Xonar**, la guía funciona igual: apaga los efectos tanto en el *ASUS Audio Center* como en el *C-Media Panel* (GX/Xear3D incluidos), y si Equalizer APO no carga, usa el modo SFX/EFX del paso 2. Hay un usuario que comenta en la página del UNi un "golpe" de sonido con Peace que desapareció al desinstalarlo; es un caso aislado, pero si te pasa, ya sabes de dónde puede venir.
 
 **En el panel de la Xonar:**
 1. Salida analógica en **Headphone** (auriculares).
