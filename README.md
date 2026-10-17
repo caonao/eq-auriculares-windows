@@ -169,6 +169,9 @@ No. Los 10 filtros de AutoEq son **paramétricos**: cada uno tiene su frecuencia
 **¿Pierdo el bit-perfect?**
 Sí, a propósito: corregir es cambiar la señal. Pero lo que se gana (corregir desviaciones de varios dB que se oyen claramente) es mucho mayor que lo que se pierde (diferencias del mezclador de Windows que el oído no detecta). El bit-perfect solo sirve si quieres el sonido de fábrica sin tocar o para hacer mediciones.
 
+**En el editor de Equalizer APO sale "Peak gain" en rojo (+0,1 dB). ¿Es grave?**
+No, pero lo correcto es que no salga. Significa que en algún punto la corrección sube la señal una décima por encima del original, porque el preamp de la base AutoEQ va redondeado. Solución: bajar la preamplificación 0,1 dB en Peace. `autoeq_peace.py` ya lo hace solo al exportar (deja el pico en 0 dB o por debajo).
+
 **¿Se oirá distinto al principio?**
 Probablemente. El oído se acostumbra a cualquier curva. Escúchalo unos días con música que conozcas y luego apágalo un momento (botón verde de Peace): ahí se nota de verdad. Al comparar, iguala el volumen, porque sin EQ suena algo más alto y el oído confunde "más alto" con "mejor".
 

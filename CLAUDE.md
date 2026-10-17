@@ -111,6 +111,7 @@ Edita los archivos **solo con la app cerrada**, con copia previa, y comprueba de
 - **Recrear salidas**: actualizar el driver, cambiar la frecuencia de la tarjeta o su modo de salida puede hacer que Windows **recree la salida con un GUID nuevo**. Consecuencias: Equalizer APO desaparece de ella (repetir el paso 3) y Spotify y Kodi apuntan a una salida que ya no existe (guardan el GUID). AIMP la guarda por nombre.
 - **Peace y `config.txt`**: Peace deja `config.txt` en `Include: peace.txt` y escribe ahí el preset. `Cambiar-EQ.ps1` respeta ese esquema, así que los dos sistemas conviven.
 - **Un mismo perfil para todo lo que sale por esa salida**: si hay altavoces en la misma salida, también reciben la corrección. Se apaga desde Peace.
+- **"Peak gain" en rojo en el editor de Equalizer APO**: el preamp de la base AutoEQ va redondeado y deja un pico de +0,05/+0,1 dB. `autoeq_peace.py exportar` ya baja el preamp en pasos de 0,1 dB hasta que el pico quede en 0 dB o menos. Si el perfil se cargó a mano con el botón AutoEQ de Peace, baja tú la preamplificación 0,1 dB en Peace y guarda el preset.
 - **Volumen distinto entre perfiles**: cada uno tiene su preamplificación negativa para no saturar. Es normal.
 - **Bit-perfect**: con la corrección no lo hay, y es a propósito; ver la FAQ del README.
 - Los scripts `.ps1` del repositorio están en **UTF-8 con BOM** para que PowerShell 5.1 lea bien los acentos; si los editas, mantenlo.

@@ -14,6 +14,7 @@ Ejemplos:
 Hay que ejecutarlo como administrador (la carpeta config está en Archivos de programa).
 """
 import argparse
+import math
 import os
 import re
 import subprocess
@@ -86,6 +87,49 @@ def a_filtros(codigo):
     return preamp, filtros
 
 
+def _biquad(t, fc, g, q, fs=48000.0):
+    a_ = 10 ** (g / 40)
+    w = 2 * math.pi * fc / fs
+    c, s = math.cos(w), math.sin(w)
+    al = s / (2 * q)
+    if t == "PK":
+        return [1 + al * a_, -2 * c, 1 - al * a_], [1 + al / a_, -2 * c, 1 - al / a_]
+    k = 2 * math.sqrt(a_) * al
+    if t == "LSC":
+        return ([a_ * ((a_ + 1) - (a_ - 1) * c + k), 2 * a_ * ((a_ - 1) - (a_ + 1) * c), a_ * ((a_ + 1) - (a_ - 1) * c - k)],
+                [(a_ + 1) + (a_ - 1) * c + k, -2 * ((a_ - 1) + (a_ + 1) * c), (a_ + 1) + (a_ - 1) * c - k])
+    return ([a_ * ((a_ + 1) + (a_ - 1) * c + k), -2 * a_ * ((a_ - 1) + (a_ + 1) * c), a_ * ((a_ + 1) + (a_ - 1) * c - k)],
+            [(a_ + 1) - (a_ - 1) * c + k, 2 * ((a_ - 1) - (a_ + 1) * c), (a_ + 1) - (a_ - 1) * c - k])
+
+
+def pico(preamp, filtros, fs=48000.0):
+    """Ganancia máxima (dB) de la corrección completa entre 20 Hz y 20 kHz."""
+    coefs = [_biquad(*f, fs=fs) for f in filtros]
+    maximo = -1e9
+    for i in range(2001):
+        f = 20 * 1000 ** (i / 2000)
+        z1 = complex(math.cos(-2 * math.pi * f / fs), math.sin(-2 * math.pi * f / fs))
+        z2 = z1 * z1
+        total = preamp
+        for b, a in coefs:
+            total += 20 * math.log10(abs((b[0] + b[1] * z1 + b[2] * z2) / (a[0] + a[1] * z1 + a[2] * z2)))
+        maximo = max(maximo, total)
+    return maximo
+
+
+def preamp_seguro(preamp, filtros):
+    """Baja el preamp en pasos de 0,1 dB hasta que la corrección no suba nada la señal.
+
+    El preamp de la base va redondeado y a veces deja un pico de +0,05/+0,1 dB
+    (Equalizer APO lo marca en rojo como 'Peak gain'). Con el pico en 0 dB o menos,
+    la corrección no puede saturar aunque la canción venga grabada al máximo.
+    """
+    p = pico(preamp, filtros)
+    if p <= 0:
+        return preamp
+    return math.floor((preamp - p) * 10) / 10
+
+
 def num(x):
     return str(int(x)) if x == int(x) else str(x)
 
@@ -141,6 +185,10 @@ def main():
         print("Aviso: hay varias mediciones de ese medidor; uso la primera:", cand[0][2] or "(sin banco)")
     modelo, medidor, _, codigo = cand[0]
     preamp, filtros = a_filtros(codigo)
+    seguro = preamp_seguro(preamp, filtros)
+    if seguro != preamp:
+        print(f"Preamp ajustado de {num(preamp)} a {num(seguro)} dB para que la correccion no supere 0 dB (pico era {pico(preamp, filtros):+.2f} dB)")
+        preamp = seguro
 
     carpeta = os.path.join(a.salida, "perfiles")
     os.makedirs(carpeta, exist_ok=True)
